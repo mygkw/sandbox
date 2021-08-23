@@ -9,11 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       # デプロイ日時の取得とワークフロー内変数の定義
       - name: Define variable of deploy date
         id: deploy_date_variable
         run: |
-          TAG_NAME=`$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")`
+          echo ${{ github.ref }}
+          TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
+          echo ${TAG_NAME}
           TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | sed -r 's/^.*\(([0-9]{3})\)$/\1/'`
 
@@ -25,6 +28,7 @@ jobs:
           else
             echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
           fi
+
       - name: hoge
         run: |
           echo ${{ steps.deploy_date_variable.outputs.suffix }}
