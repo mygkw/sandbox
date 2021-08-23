@@ -19,6 +19,7 @@ jobs:
           TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
           echo "aaaaa"
           echo ${TAG_NAME}
+          git tag -n
           TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | sed -r 's/^.*\(([0-9]{3})\)$/\1/'`
 
