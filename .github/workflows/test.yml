@@ -3,6 +3,11 @@ on:
     tags:
       - r[0-9]+.[0-9]+.[0-9]+
 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
       # デプロイ日時の取得とワークフロー内変数の定義
       - name: Define variable of deploy date
         id: deploy_date_variable
