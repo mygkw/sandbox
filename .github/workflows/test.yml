@@ -1,3 +1,4 @@
+name: fuga
 on:
   push:
     tags:
@@ -24,5 +25,6 @@ jobs:
           else
             echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
           fi
-      - run |
+      - name: hoge
+        run |
           echo ${{ steps.deploy_date_variable.outputs.suffix }}
