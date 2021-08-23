@@ -14,7 +14,7 @@ jobs:
       - name: Define variable of deploy date
         id: deploy_date_variable
         run: |
-          echo ${{ github.ref }}
+          echo ${{ github.event }}
           TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
           echo ${TAG_NAME}
           TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
