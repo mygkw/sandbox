@@ -26,5 +26,5 @@ jobs:
             echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
           fi
       - name: hoge
-        run |
+        run: |
           echo ${{ steps.deploy_date_variable.outputs.suffix }}
