@@ -17,11 +17,7 @@ jobs:
         id: deploy_date_variable
         run: |
           TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
-          echo "aaaaa"
           echo ${TAG_NAME}
-          git tag -n
-          git tag --list ${TAG_NAME} -n
-          git tag -v ${TAG_NAME}
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
           git tag -l --format='%(contents:subject)' ${TAG_NAME}
           # TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
