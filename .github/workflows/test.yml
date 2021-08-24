@@ -48,7 +48,7 @@ jobs:
           AFTER_WEEK_DATETIME=`date '+%Y%m%d%H' -d '7 days'`
 
           if ((${DEPLOY_DATETIME} <= ${CURRENT_DATETIME} || ${DEPLOY_DATETIME} > ${AFTER_WEEK_DATETIME})); then
-            echo デプロイ日時には現時刻〜1週間後を設定してください。デプロイ時刻: ${DEPLOY_DATETIME})
+            echo デプロイ日時には現時刻〜1週間後を設定してください。デプロイ時刻: ${DEPLOY_DATETIME}
             exit 1
           fi
 
