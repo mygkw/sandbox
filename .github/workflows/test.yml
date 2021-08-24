@@ -22,7 +22,9 @@ jobs:
           git tag -n
           git tag --list ${TAG_NAME} -n
           git tag -v ${TAG_NAME}
-          TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          git tag -l --format='%(contents:subject)' ${TAG_NAME}
+          # TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | sed -r 's/^.*\(([0-9]{3})\)$/\1/'`
 
           CURRENT_DATETIME=`date '+%Y%m%d%H'`
