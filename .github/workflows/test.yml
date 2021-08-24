@@ -38,7 +38,6 @@ jobs:
 
           # デプロイ日時が存在しなければ終了
           if [ -z ${DEPLOY_DATETIME} ]; then
-            echo "::set-output name=filename::DOMAIN_NAME.tgz"
             echo "::set-output name=filename::${DOMAIN_NAME}.tgz"
             exit
           fi
@@ -56,4 +55,4 @@ jobs:
 
       - name: hoge
         run: |
-          ${{ steps.filename_variable.outputs.filename }}
+          echo ${{ steps.filename_variable.outputs.filename }}
