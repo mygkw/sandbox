@@ -12,8 +12,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # ワークフロー内変数の定義
+      - name: Define variable
+        id: variable
+        run: |
+          echo "::set-output name=repository_name::digima_try-gakuin.com"
+          echo "::set-output name=domain_name::try-gakuin.com"
+
+      # デプロイ日時の取得とワークフロー内変数の定義
       - name: Define variable of deploy date
-        id: deploy_date_variable
+        id: filename_variable
         run: |
           # タグ名の取得
           TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
@@ -26,7 +34,8 @@ jobs:
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | grep -E '^.*\(([0-9]{10})\)$' | sed -r 's/^.*\(([0-9]{10})\)$/\1/'`
 
           # デプロイ日時が存在しなければ終了
-          if [-z ${DEPLOY_DATETIME}];then
+          if [-z ${DEPLOY_DATETIME}]; then
+            echo "::set-output name=filename::${{ steps.variable.outputs.domain_name }}"
             exit
           fi
 
@@ -34,13 +43,13 @@ jobs:
           CURRENT_DATETIME=`date '+%Y%m%d%H'`
           AFTER_WEEK_DATETIME=`date '+%Y%m%d%H' -d '7 days'`
 
-          if((DEPLOY_DATETIME <= $CURRENT_DATETIME || $DEPLOY_DATETIME > $AFTER_WEEK_DATETIME)); then
+          if ((DEPLOY_DATETIME <= $CURRENT_DATETIME || $DEPLOY_DATETIME > $AFTER_WEEK_DATETIME)); then
             echo デプロイ日時には現時刻〜1週間後を設定してください。 (デプロイ時刻 = ${DEPLOY_DATETIME})
             exit 1
           fi
 
-          echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
+          echo "::set-output name=filename::${{ steps.variable.outputs.domain_name }}.${$DEPLOY_DATETIME}"
 
       - name: hoge
         run: |
-          echo ${{ steps.deploy_date_variable.outputs.suffix }}
+          ${{ steps.filename_variable.outputs.filename }}
