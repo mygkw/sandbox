@@ -20,7 +20,7 @@ jobs:
 
           # タグメッセージの取得(actions/checkout@v2で取得するとタグ情報が欠落するためfetchしている)
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          TAG_MESSAGE=git tag -l --format='%(contents:subject)' ${TAG_NAME}
+          TAG_MESSAGE=`git tag -l --format='%(contents:subject)' ${TAG_NAME}`
 
           # タグメッセージ中のデプロイ日時の抽出
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | grep -E '^.*\(([0-9]{10})\)$' | sed -r 's/^.*\(([0-9]{10})\)$/\1/'`
