@@ -44,10 +44,8 @@ jobs:
           fi
 
           # デプロイ日時が現時刻〜1週間後に収まっていることのチェック
-          CURRENT_DATETIME=`date '+%Y%m%d%H'`
-          AFTER_WEEK_DATETIME=`date '+%Y%m%d%H' -d '7 days'`
-          echo $CURRENT_DATETIME
-          echo `TZ="Asia/Tokyo" date '+%Y%m%d%H'`
+          CURRENT_DATETIME=`TZ='Asia/Tokyo' date '+%Y%m%d%H'`
+          AFTER_WEEK_DATETIME=`TZ='Asia/Tokyo' date '+%Y%m%d%H' -d '7 days'`
 
           if ((${DEPLOY_DATETIME} <= ${CURRENT_DATETIME} || ${DEPLOY_DATETIME} > ${AFTER_WEEK_DATETIME})); then
             echo デプロイ日時には現時刻〜1週間後を設定してください。デプロイ時刻: ${DEPLOY_DATETIME}
