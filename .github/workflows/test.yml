@@ -34,7 +34,7 @@ jobs:
           DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | grep -E '^.*\(([0-9]{10})\)$' | sed -r 's/^.*\(([0-9]{10})\)$/\1/'`
 
           # デプロイ日時が存在しなければ終了
-          if [-z ${DEPLOY_DATETIME}]; then
+          if [ -z ${DEPLOY_DATETIME} ]; then
             echo "::set-output name=filename::${{ steps.variable.outputs.domain_name }}"
             exit
           fi
