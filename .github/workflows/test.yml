@@ -12,25 +12,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # デプロイ日時の取得とワークフロー内変数の定義
       - name: Define variable of deploy date
         id: deploy_date_variable
         run: |
+          # タグ名の取得
           TAG_NAME=`echo ${{ github.ref }} | sed -e "s#refs/tags/##g"`
-          echo ${TAG_NAME}
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          git tag -l --format='%(contents:subject)' ${TAG_NAME}
-          # TAG_MESSAGE=`git tag -n | grep ${TAG_NAME}`
-          DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | sed -r 's/^.*\(([0-9]{3})\)$/\1/'`
 
+          # タグメッセージの取得(actions/checkout@v2で取得するとタグ情報が欠落するためfetchしている)
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          TAG_MESSAGE=git tag -l --format='%(contents:subject)' ${TAG_NAME}
+
+          # タグメッセージ中のデプロイ日時の抽出
+          DEPLOY_DATETIME=`echo ${TAG_MESSAGE} | grep -E '^.*\(([0-9]{10})\)$' | sed -r 's/^.*\(([0-9]{10})\)$/\1/'`
+
+          # デプロイ日時が存在しなければ終了
+          if [-z ${DEPLOY_DATETIME}];then
+            exit
+          fi
+
+          # デプロイ日時が現時刻〜1週間後に収まっていることのチェック
           CURRENT_DATETIME=`date '+%Y%m%d%H'`
           AFTER_WEEK_DATETIME=`date '+%Y%m%d%H' -d '7 days'`
 
-          if(($CURRENT_DATETIME < $DEPLOY_DATETIME && $DEPLOY_DATETIME <= $AFTER_WEEK_DATETIME)); then
-            echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
-          else
-            echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
+          if((DEPLOY_DATETIME <= $CURRENT_DATETIME || $DEPLOY_DATETIME > $AFTER_WEEK_DATETIME)); then
+            echo デプロイ日時には現時刻〜1週間後を設定してください。 (デプロイ時刻 = ${DEPLOY_DATETIME})
+            exit 1
           fi
+
+          echo "::set-output name=suffix::.${$DEPLOY_DATETIME}"
 
       - name: hoge
         run: |
