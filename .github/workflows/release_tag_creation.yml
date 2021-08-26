@@ -17,7 +17,7 @@ on:
         required: false
 
 jobs:
-  deploy:
+  runner:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,13 +35,11 @@ jobs:
 
       # バリデーション
       - name: Validate
-        id: variable
         run: |
           echo validation
 
       # タグの作成とpush
       - name: Create tag and push
-        id: variable
         run: |
           git tag -a ${{ github.event.inputs.tag_name }} -m ${{ github.event.inputs.tag_body }}
           git push origin ${{ github.event.inputs.tag_name }}
