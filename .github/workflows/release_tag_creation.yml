@@ -1,0 +1,47 @@
+name: Create release tag of git
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: タグ名。"r"(本番)または"d"(プレビュー環境)から始まる値を入力。e.g. "d0.1.0"
+        required: true
+      tag_title:
+        description: タグのタイトル。基本的にリリースPRのタイトルを入力。
+        required: true
+      tag_body:
+        description: タグの詳細。基本的にリリースPRのURLを入力。
+        required: true
+      release_date:
+        description: リリース日時。"YYYYMMDDHH"を入力。即時リリースの場合は省略。e.g. "2021090113" (2021/09/01 13:00にリリース)
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 入力値の出力
+      - name: Output variables
+        run: |
+          echo "tag_name: ${{ github.event.inputs.tag_name }}"
+          echo "tag_title: ${{ github.event.inputs.tag_title }}"
+          echo "tag_body: ${{ github.event.inputs.tag_body }}"
+          echo "release_date: ${{ github.event.inputs.release_date }}"
+
+      # チェックアウト
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # バリデーション
+      - name: Validate
+        id: variable
+        run: |
+          echo validation
+
+      # タグの作成とpush
+      - name: Create tag and push
+        id: variable
+        run: |
+          git tag -a ${{ github.event.inputs.tag_name }} -m ${{ github.event.inputs.tag_body }}
+          git push origin ${{ github.event.inputs.tag_name }}
