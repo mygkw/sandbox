@@ -36,7 +36,9 @@ jobs:
       # バリデーション - タグ名のチェック
       - name: Validate tag_name
         run: |
-          if [[ !(${{ github.event.inputs.tag_name }} =~ "^[r|d][0-9]+.[0-9]+.[0-9]+$") ]]; then
+          VERSION_REG="[rd][0-9]+.[0-9]+.[0-9]+"
+
+          if [[ !("${{ github.event.inputs.tag_name }}" =~ $VERSION_REG) ]]; then
             echo "タグ名がフォーマット違反です。タグ名: ${{ github.event.inputs.tag_name }}"
             exit 1
           fi
@@ -44,14 +46,14 @@ jobs:
       # バリデーション - デプロイ日時が現時刻〜1週間後に収まっていることのチェック
       - name: Validate release_date
         run: |
-          if [ -z ${{ github.event.inputs.release_date }} ]; then
+          if [ -z "${{ github.event.inputs.release_date }}" ]; then
             exit 0
           fi
 
           CURRENT_DATETIME=`TZ='Asia/Tokyo' date '+%Y%m%d%H'`
           AFTER_WEEK_DATETIME=`TZ='Asia/Tokyo' date '+%Y%m%d%H' -d '7 days'`
 
-          if ((${{ github.event.inputs.release_date }} <= ${CURRENT_DATETIME} || ${{ github.event.inputs.release_date }} > ${AFTER_WEEK_DATETIME})); then
+          if (("${{ github.event.inputs.release_date }}" <= ${CURRENT_DATETIME} || ${{ github.event.inputs.release_date }} > ${AFTER_WEEK_DATETIME})); then
             echo "デプロイ日時には現在〜1週間後を設定してください。デプロイ日時: ${{ github.event.inputs.release_date }}"
             exit 1
           fi
