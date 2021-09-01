@@ -6,10 +6,10 @@ on:
       tag_name:
         description: タグ名。"r"(本番)または"d"(プレビュー環境)から始まる値を入力。e.g. "d0.1.0"
         required: true
-      tag_title:
+      tag_headline:
         description: タグのタイトル。基本的にリリースPRのタイトルを入力。
         required: true
-      tag_body:
+      tag_description:
         description: タグの詳細。基本的にリリースPRのURLを入力。
         required: true
       release_date:
@@ -25,8 +25,8 @@ jobs:
       - name: Output variables
         run: |
           echo "tag_name: ${{ github.event.inputs.tag_name }}"
-          echo "tag_title: ${{ github.event.inputs.tag_title }}"
-          echo "tag_body: ${{ github.event.inputs.tag_body }}"
+          echo "tag_headline: ${{ github.event.inputs.tag_headline }}"
+          echo "tag_description: ${{ github.event.inputs.tag_description }}"
           echo "release_date: ${{ github.event.inputs.release_date }}"
 
       # チェックアウト
@@ -44,5 +44,5 @@ jobs:
           git config user.email "tag_creator@example.com"
           git config user.name "tag creator"
 
-          git tag -a ${{ github.event.inputs.tag_name }} -m ${{ github.event.inputs.tag_body }}
+          git tag -a ${{ github.event.inputs.tag_name }} -m "${{ github.event.inputs.tag_body }}\n\n${{ github.event.inputs.tag_body }}"
           git push origin ${{ github.event.inputs.tag_name }}
