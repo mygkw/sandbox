@@ -44,5 +44,5 @@ jobs:
           git config user.email "tag_creator@example.com"
           git config user.name "tag creator"
 
-          git tag -a ${{ github.event.inputs.tag_name }} -m "${{ github.event.inputs.tag_body }}\n\n${{ github.event.inputs.tag_body }}"
+          git tag -a ${{ github.event.inputs.tag_name }} -m "${{ github.event.inputs.tag_headline }}\n\n${{ github.event.inputs.tag_description }}"
           git push origin ${{ github.event.inputs.tag_name }}
