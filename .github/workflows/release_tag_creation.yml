@@ -36,10 +36,13 @@ jobs:
       # バリデーション
       - name: Validate
         run: |
-          echo validation
+          echo 'todo validation'
 
       # タグの作成とpush
       - name: Create tag and push
         run: |
+          git config user.email "tag_creator@example.com"
+          git config user.name "tag creator"
+
           git tag -a ${{ github.event.inputs.tag_name }} -m ${{ github.event.inputs.tag_body }}
           git push origin ${{ github.event.inputs.tag_name }}
