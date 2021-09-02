@@ -32,6 +32,8 @@ jobs:
       # チェックアウト
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       # バリデーション - タグ名のチェック
       - name: Validate tag_name
