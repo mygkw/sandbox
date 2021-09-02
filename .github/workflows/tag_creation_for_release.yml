@@ -66,7 +66,7 @@ jobs:
           git config user.email "tag_creator@example.com"
           git config user.name "tag creator"
 
-          git tag -a ${{ github.event.inputs.tag_name }} -F- <<EOM
+          git tag -a "${{ github.event.inputs.tag_name }}(${{ github.event.inputs.release_date }})" -F- <<EOM
             ${{ github.event.inputs.tag_headline }}
 
             ${{ github.event.inputs.tag_description }}
