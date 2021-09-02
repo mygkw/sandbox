@@ -1,0 +1,11 @@
+name: sample
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: hoge
+        run: echo hoge
