@@ -66,7 +66,7 @@ jobs:
           HEADLINE=${{ github.event.inputs.tag_headline }}
 
           if [ -n "${{ github.event.inputs.release_date }}" ]; then
-            HEADLINE=${HEADLINE}(${{ github.event.inputs.release_date }})
+            HEADLINE="${HEADLINE}(${{ github.event.inputs.release_date }})"
           fi
 
           git config user.email "tag_creator@example.com"
