@@ -63,11 +63,17 @@ jobs:
       # タグの作成とpush
       - name: Create tag and push
         run: |
+          HEADLINE=${{ github.event.inputs.tag_headline }}
+
+          if [ -n "${{ github.event.inputs.release_date }}" ]; then
+            HEADLINE=${HEADLINE}(${{ github.event.inputs.release_date }})
+          fi
+
           git config user.email "tag_creator@example.com"
           git config user.name "tag creator"
 
           git tag -a ${{ github.event.inputs.tag_name }} -F- <<EOM
-            ${{ github.event.inputs.tag_headline }}(${{ github.event.inputs.release_date }})
+            $HEADLINE
 
             ${{ github.event.inputs.tag_description }}
           EOM
